@@ -1,0 +1,26 @@
+# Java / Maven (backend)
+event-ticket-backend/target/
+*.class
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.settings/
+.classpath
+.project
+bin/
+
+# React / Node (frontend)
+event-ticket-frontend/node_modules/
+event-ticket-frontend/dist/
+event-ticket-frontend/.vite/
+
+# Environment secrets, if you ever add any
+*.env
+
+# OS
+.DS_Store
+Thumbs.db
