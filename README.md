@@ -4,8 +4,6 @@ A full-stack event ticket booking and management platform built with **Spring Bo
 
 The application supports three roles — **ADMIN, ORGANIZER, and CUSTOMER** — with role-specific workflows for event approval, venue management, ticket management, and ticket booking.
 
-> This README documents the **actual versions and implementation used in this project**. The original build guide was used as the project roadmap, but the final stack and structure below reflect the completed application rather than the guide's older version numbers.
-
 ---
 
 ## Features
