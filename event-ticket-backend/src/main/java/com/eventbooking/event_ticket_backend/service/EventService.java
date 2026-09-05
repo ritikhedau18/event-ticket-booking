@@ -14,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class EventService {
@@ -84,6 +86,18 @@ public class EventService {
 
         return EventResponse.fromEntity(
                 eventRepository.save(event));
+    }
+
+    public List<EventResponse> getMyEvents(Long organizerId) {
+        return eventRepository.findByOrganizerId(organizerId).stream()
+                .map(EventResponse::fromEntity)
+                .toList();
+    }
+
+    public List<EventResponse> getPendingEvents() {
+        return eventRepository.findByStatus(EventStatus.PENDING).stream()
+                .map(EventResponse::fromEntity)
+                .toList();
     }
 
 }

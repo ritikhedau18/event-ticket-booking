@@ -14,6 +14,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/events")
 @RequiredArgsConstructor
@@ -55,4 +57,19 @@ public class EventController {
     public EventResponse approve(@PathVariable Long id) {
         return eventService.approve(id);
     }
+
+    @GetMapping("/mine")
+    @PreAuthorize("hasAnyRole('ORGANIZER','ADMIN')")
+    public List<EventResponse> myEvents(
+            @AuthenticationPrincipal User user) {
+
+        return eventService.getMyEvents(user.getId());
+    }
+
+    @GetMapping("/pending")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<EventResponse> pendingEvents() {
+        return eventService.getPendingEvents();
+    }
+
 }
