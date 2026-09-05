@@ -20,6 +20,14 @@ export default function OrganizerDashboardPage() {
     const [ticketForm, setTicketForm] = useState({});
     const [creatingEvent, setCreatingEvent] = useState(false);
     const [addingTicket, setAddingTicket] = useState(null);
+    const [editingTicket, setEditingTicket] = useState(null);
+    const [editTicketForm, setEditTicketForm] = useState({
+        name: '',
+        price: ''
+    });
+
+    const [managingTicket, setManagingTicket] = useState(null);
+    const [increaseQuantity, setIncreaseQuantity] = useState('');
 
     const loadEvents = async () => {
         try {
@@ -170,6 +178,78 @@ export default function OrganizerDashboardPage() {
             setMessageType('error');
         } finally {
             setAddingTicket(null);
+        }
+    };
+
+    const handleEditTicket = async (ticketId, eventId) => {
+        if (!editTicketForm.name || !editTicketForm.price) {
+            setMessage('Please fill in the ticket name and price.');
+            setMessageType('error');
+            return;
+        }
+
+        setMessage('');
+
+        try {
+            await axiosInstance.put(
+                `/events/${eventId}/ticket-types/${ticketId}`,
+                {
+                    name: editTicketForm.name,
+                    price: Number(editTicketForm.price)
+                }
+            );
+
+            setMessage('Ticket type updated successfully.');
+            setMessageType('success');
+
+            setEditingTicket(null);
+            setEditTicketForm({
+                name: '',
+                price: ''
+            });
+
+            await loadEvents();
+        } catch (err) {
+            setMessage(
+                err.response?.data?.message ||
+                'Failed to update ticket type.'
+            );
+            setMessageType('error');
+        }
+    };
+
+    const handleIncreaseQuantity = async (ticketId, eventId) => {
+        const quantity = Number(increaseQuantity);
+
+        if (!quantity || quantity < 1) {
+            setMessage('Please enter a quantity of at least 1.');
+            setMessageType('error');
+            return;
+        }
+
+        setMessage('');
+
+        try {
+            await axiosInstance.put(
+                `/events/${eventId}/ticket-types/${ticketId}/quantity`,
+                {
+                    quantity
+                }
+            );
+
+            setMessage('Ticket quantity increased successfully.');
+            setMessageType('success');
+
+            setManagingTicket(null);
+            setIncreaseQuantity('');
+
+            await loadEvents();
+        } catch (err) {
+            setMessage(
+                err.response?.data?.message ||
+                'Failed to increase ticket quantity.'
+            );
+            setMessageType('error');
         }
     };
 
@@ -603,24 +683,121 @@ export default function OrganizerDashboardPage() {
                                                                 </small>
                                                             </div>
 
-                                                            {/* Future functionality */}
-                                                            <div className="ticket-management-placeholder">
-                                                                <button
-                                                                    type="button"
-                                                                    disabled
-                                                                    title="Ticket editing will be implemented after the UI redesign."
-                                                                >
-                                                                    Edit
-                                                                </button>
 
-                                                                <button
-                                                                    type="button"
-                                                                    disabled
-                                                                    title="Quantity management will be implemented after the UI redesign."
-                                                                >
-                                                                    Manage
-                                                                </button>
-                                                            </div>
+                                                            {editingTicket === ticket.id ? (
+                                                                <div className="ticket-edit-form">
+
+                                                                    <input
+                                                                        type="text"
+                                                                        value={editTicketForm.name}
+                                                                        onChange={(e) =>
+                                                                            setEditTicketForm({
+                                                                                ...editTicketForm,
+                                                                                name: e.target.value
+                                                                            })
+                                                                        }
+                                                                        placeholder="Ticket name"
+                                                                    />
+
+                                                                    <input
+                                                                        type="number"
+                                                                        min="0"
+                                                                        value={editTicketForm.price}
+                                                                        onChange={(e) =>
+                                                                            setEditTicketForm({
+                                                                                ...editTicketForm,
+                                                                                price: e.target.value
+                                                                            })
+                                                                        }
+                                                                        placeholder="Price"
+                                                                    />
+
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() =>
+                                                                            handleEditTicket(ticket.id, event.id)
+                                                                        }
+                                                                    >
+                                                                        Save
+                                                                    </button>
+
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() => {
+                                                                            setEditingTicket(null);
+                                                                            setEditTicketForm({
+                                                                                name: '',
+                                                                                price: ''
+                                                                            });
+                                                                        }}
+                                                                    >
+                                                                        Cancel
+                                                                    </button>
+
+                                                                </div>
+                                                            ) : managingTicket === ticket.id ? (
+                                                                <div className="ticket-edit-form">
+
+                                                                    <input
+                                                                        type="number"
+                                                                        min="1"
+                                                                        value={increaseQuantity}
+                                                                        onChange={(e) =>
+                                                                            setIncreaseQuantity(e.target.value)
+                                                                        }
+                                                                        placeholder="Add quantity"
+                                                                    />
+
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() =>
+                                                                            handleIncreaseQuantity(ticket.id, event.id)
+                                                                        }
+                                                                    >
+                                                                        Add
+                                                                    </button>
+
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() => {
+                                                                            setManagingTicket(null);
+                                                                            setIncreaseQuantity('');
+                                                                        }}
+                                                                    >
+                                                                        Cancel
+                                                                    </button>
+
+                                                                </div>
+                                                            ) : (
+                                                                <div className="ticket-management-placeholder">
+
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() => {
+                                                                            setEditingTicket(ticket.id);
+                                                                            setManagingTicket(null);
+                                                                            setEditTicketForm({
+                                                                                name: ticket.name,
+                                                                                price: ticket.price
+                                                                            });
+                                                                        }}
+                                                                    >
+                                                                        Edit
+                                                                    </button>
+
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() => {
+                                                                            setManagingTicket(ticket.id);
+                                                                            setEditingTicket(null);
+                                                                            setIncreaseQuantity('');
+                                                                        }}
+                                                                    >
+                                                                        Manage
+                                                                    </button>
+
+                                                                </div>
+                                                            )}
 
                                                         </div>
                                                     )

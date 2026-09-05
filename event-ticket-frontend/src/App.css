@@ -2845,13 +2845,26 @@ td {
 }
 
 .ticket-management-placeholder button {
-    padding: 6px 9px;
-    border: 1px solid #e2e8f0;
+    padding: 6px 10px;
+    border: 1px solid #cbd5e1;
     border-radius: 7px;
+    background: white;
+    color: #4f46e5;
+    font-size: 9px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.ticket-management-placeholder button:hover:not(:disabled) {
+    background: #eef2ff;
+    border-color: #6366f1;
+}
+
+.ticket-management-placeholder button:disabled {
     background: #f8fafc;
     color: #94a3b8;
-    font-size: 9px;
-    font-weight: 600;
+    border-color: #e2e8f0;
     cursor: not-allowed;
 }
 
@@ -4418,4 +4431,57 @@ td {
     .nav-link.active::after {
         display: none;
     }
+}
+
+/* Ticket management forms */
+
+.ticket-edit-form {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.ticket-edit-form input {
+    width: 120px;
+    height: 32px;
+    padding: 0 9px;
+    border: 1px solid #dbe2ea;
+    border-radius: 7px;
+    background: #f8fafc;
+    color: #334155;
+    outline: none;
+    font-size: 10px;
+}
+
+.ticket-edit-form input:focus {
+    background: white;
+    border-color: #6366f1;
+}
+
+.ticket-edit-form button {
+    height: 32px;
+    padding: 0 10px;
+    border: 1px solid #cbd5e1;
+    border-radius: 7px;
+    background: white;
+    color: #4f46e5;
+    font-size: 9px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.ticket-edit-form button:hover {
+    background: #eef2ff;
+    border-color: #6366f1;
+}
+
+.ticket-edit-form button:first-of-type {
+    background: #4f46e5;
+    border-color: #4f46e5;
+    color: white;
+}
+
+.ticket-edit-form button:first-of-type:hover {
+    background: #4338ca;
 }
