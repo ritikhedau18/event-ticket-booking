@@ -1,11 +1,17 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 export default function Navbar() {
     const { user, logout } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        logout();
+        navigate('/login');
+    };
 
     return (
-        <nav>
+        <nav className="navbar">
             <Link to="/">Events</Link>
 
             {user ? (
@@ -13,18 +19,26 @@ export default function Navbar() {
                     <span>Hi, {user.username}</span>
 
                     {user.role === 'ORGANIZER' && (
-                        <Link to="/organizer">Organizer Dashboard</Link>
+                        <Link to="/organizer">
+                            Organizer Dashboard
+                        </Link>
                     )}
 
                     {user.role === 'ADMIN' && (
-                        <Link to="/admin">Admin Panel</Link>
+                        <Link to="/admin">
+                            Admin Panel
+                        </Link>
                     )}
 
                     {user.role === 'CUSTOMER' && (
-                        <Link to="/bookings">My Bookings</Link>
+                        <Link to="/my-bookings">
+                            My Bookings
+                        </Link>
                     )}
 
-                    <button onClick={logout}>Logout</button>
+                    <button onClick={handleLogout}>
+                        Logout
+                    </button>
                 </>
             ) : (
                 <>

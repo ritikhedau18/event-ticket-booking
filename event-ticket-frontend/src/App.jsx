@@ -8,49 +8,54 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import MyBookingsPage from './pages/MyBookingsPage';
 import OrganizerDashboardPage from './pages/OrganizerDashboardPage';
-import AdminPage from './pages/AdminPage';
+import AdminPanelPage from './pages/AdminPanelPage';
 
 export default function App() {
     return (
         <>
             <Navbar />
 
-            <Routes>
-                <Route path="/" element={<EventListPage />} />
-                <Route path="/login" element={<LoginPage />} />
-                <Route path="/register" element={<RegisterPage />} />
-                <Route
-                    path="/events/:id"
-                    element={<EventDetailPage />}
-                />
+            <div className="page-content">
+                <Routes>
+                    <Route path="/" element={<EventListPage />} />
 
-                <Route
-                    path="/bookings"
-                    element={
-                        <ProtectedRoute allowedRoles={['CUSTOMER']}>
-                            <MyBookingsPage />
-                        </ProtectedRoute>
-                    }
-                />
+                    <Route path="/login" element={<LoginPage />} />
 
-                <Route
-                    path="/organizer"
-                    element={
-                        <ProtectedRoute allowedRoles={['ORGANIZER']}>
-                            <OrganizerDashboardPage />
-                        </ProtectedRoute>
-                    }
-                />
+                    <Route path="/register" element={<RegisterPage />} />
 
-                <Route
-                    path="/admin"
-                    element={
-                        <ProtectedRoute allowedRoles={['ADMIN']}>
-                            <AdminPage />
-                        </ProtectedRoute>
-                    }
-                />
-            </Routes>
+                    <Route
+                        path="/events/:id"
+                        element={<EventDetailPage />}
+                    />
+
+                    <Route
+                        path="/my-bookings"
+                        element={
+                            <ProtectedRoute allowedRoles={['CUSTOMER']}>
+                                <MyBookingsPage />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/organizer"
+                        element={
+                            <ProtectedRoute allowedRoles={['ORGANIZER']}>
+                                <OrganizerDashboardPage />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/admin"
+                        element={
+                            <ProtectedRoute allowedRoles={['ADMIN']}>
+                                <AdminPanelPage />
+                            </ProtectedRoute>
+                        }
+                    />
+                </Routes>
+            </div>
         </>
     );
 }
